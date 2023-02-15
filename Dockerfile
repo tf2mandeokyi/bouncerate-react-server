@@ -1,6 +1,6 @@
 FROM node:16-alpine
 
-EXPOSE 43
+EXPOSE 80
 
 WORKDIR /app
 COPY . /app

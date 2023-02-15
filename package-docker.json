@@ -1,0 +1,14 @@
+{
+    "name": "src-web",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "dotenv": "*",
+        "express": "*",
+        "http": "*",
+        "path": "*",
+        "process": "*"
+    },
+    "scripts": {}
+  }
+  

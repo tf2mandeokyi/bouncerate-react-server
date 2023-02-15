@@ -1,0 +1,31 @@
+.button {
+    display: inline-block;
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 4px 8px;
+    background-color: rgba(255, 255, 255, 0.5);
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    &.big {
+        padding: 7px 8px;
+    }
+
+    @mixin colored($color) {
+        border: 1px solid $color;
+        &.highlighted, &:hover {
+            color: white;
+            background: $color;
+        }
+    }
+
+    &.red { @include colored(rgb(233, 13, 13)); }
+    &.blue { @include colored(rgb(48, 152, 255)); }
+    &.darkblue { @include colored(rgb(0, 76, 175)); }
+    &.gray { @include colored(gray); }
+}

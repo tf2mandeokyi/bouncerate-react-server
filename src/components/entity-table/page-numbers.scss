@@ -1,0 +1,35 @@
+.page-numbers {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 30px 1fr;
+    
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    div { display: inline-block; }
+
+    .left { text-align: right; }
+    .right { text-align: left; }
+    .center {
+        text-align: center;
+        cursor: inherit;
+
+        .page-number {
+            color: inherit;
+            cursor: inherit;
+            &:hover { text-decoration: inherit; }
+        }
+    }
+
+    .page-number {
+        color: rgb(39, 165, 255);
+        cursor: pointer;
+        padding: 0px 5px;
+
+        &:hover { text-decoration: underline; }
+    }
+}

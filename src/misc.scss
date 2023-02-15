@@ -1,0 +1,17 @@
+@mixin cross-background($color, $thickness) {
+    $gradient-thickness: $thickness * 0.727;
+
+    background: 
+         linear-gradient(to top left,
+             rgba(0,0,0,0) 0,
+             rgba(0,0,0,0) calc(50% - #{$gradient-thickness}),
+             $color (50%),
+             rgba(0,0,0,0) calc(50% + #{$gradient-thickness}),
+             rgba(0,0,0,0) 100%),
+         linear-gradient(to top right,
+             rgba(0,0,0,0) 0,
+             rgba(0,0,0,0) calc(50% - #{$gradient-thickness}),
+             $color (50%),
+             rgba(0,0,0,0) calc(50% + #{$gradient-thickness}),
+             rgba(0,0,0,0) 100%);
+}

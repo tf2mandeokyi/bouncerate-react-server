@@ -1,0 +1,34 @@
+@import '../../colors.scss';
+
+.entity-description-table {
+    border-collapse: collapse;
+    flex: none;
+    align-self: stretch;
+    
+    tr {
+        height: 40px;
+        
+        &:first-child {
+            color: $site-color;
+            background: rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border-bottom: 10px solid white;
+        }
+        
+        &:not(:first-child) {
+            font-size: 18px;
+            td {
+                padding: 7px 20px;
+                &:first-child {
+                    background: rgba(0, 0, 0, 0.05);
+                    text-align: right;
+                    width: 0px;
+                    white-space: nowrap;
+                }
+                &:not(:first-child) {
+                    text-align: left;
+                }
+            }
+        }
+    }
+}

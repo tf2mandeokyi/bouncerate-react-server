@@ -1,0 +1,72 @@
+@import '../../colors.scss';
+
+
+.schedule-table-wrapper {
+    width: 100%;
+    flex: none;
+    overflow-x: auto;
+
+    table {
+        width: 100%;
+        text-align: center;
+        border-collapse: collapse;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+
+        $tr-height: 50px;
+
+        .button {
+            margin: 5px 0;
+        }
+
+        select {
+            width: 100%;
+            height: $tr-height;
+            text-align: center;
+
+            &:hover:not(:focus) {
+                background-color: rgba(0, 0, 0, 0.1);
+            }
+        }
+
+        thead {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+
+            .button {
+                font-size: 12px;
+                background-color: rgba($site-color, 0.15);
+            }
+        }
+
+        tr {
+            height: $tr-height;
+            td {
+                min-width: 150px;
+
+                &:nth-child(2n-1):not(:first-child) {
+                    background-color: rgba(0, 0, 0, 0.05);
+                }
+                &:first-child {
+                    border-right: 1px solid rgba(0, 0, 0, 0.5);
+                }
+            }
+
+            &:nth-child(2) {
+                border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+            }
+
+            &.br-exp {
+                height: 35px;
+                font-size: 85%;
+                background-color: rgba(0, 55, 255, 0.1);
+
+                td {
+                    padding-top: 3px;
+                }
+
+                .button {
+                    font-size: 11px;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,33 @@
+input[type=number] {
+    width: 60px;
+    margin: 0 5px;
+    padding: 6px 6px;
+    font: inherit;
+    border: 1px solid rgba(181, 181, 181, 0.8);
+    border-radius: 6px;
+    
+    -moz-appearance: textfield;
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+}
+
+select {
+    background-color: transparent;
+    border: none;
+    font-family: inherit;
+    font-size: 90%;
+    cursor: pointer;
+
+    option {
+        &.highlighted {
+            background-color: rgba(255, 255, 0, 0.5);
+        }
+    }
+
+    &:focus {
+        border: none;
+    }
+}

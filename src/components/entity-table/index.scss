@@ -1,0 +1,49 @@
+@import '../../colors.scss';
+
+
+.entity-table-div {
+    flex: none;
+    align-self: stretch;
+
+    .entity-table {
+        width: 100%;
+        margin-bottom: 20px;
+        border-collapse: collapse;
+
+        thead {
+            border-bottom: 1px solid gray;
+            text-align: center;
+        }
+
+        .button {
+            font-size: 85%;
+        }
+
+        tr {
+            height: 50px;
+
+            &.clickable:not(.selected) {
+                cursor: pointer;
+
+                &:hover {
+                    background-color: rgba(0, 0, 0, 0.15);
+                }
+            }
+
+            &.selected {
+                background-color: rgba($site-color, 0.5);
+            }
+
+            &:nth-child(2n):not(.selected) {
+                background-color: rgba(0, 0, 0, 0.05);
+            }
+
+            td {
+                padding: 3px 4px;
+                width: 1px;
+                white-space: nowrap;
+                text-align: center;
+            }
+        }
+    }
+}

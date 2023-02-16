@@ -1,6 +1,7 @@
 src/main/webapp
 /node_modules
 /build
+/docker_image
 .env.local
 .env.development.local
 .env.test.local

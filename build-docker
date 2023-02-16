@@ -1,0 +1,7 @@
+npm run build
+docker build -t bouncerate-react-server .
+
+rm -rf docker_image
+mkdir docker_image
+docker save -o docker_image/bouncerate-react-server-image.tar bouncerate-react-server
+docker image rm bouncerate-react-server

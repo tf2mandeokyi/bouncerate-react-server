@@ -1,23 +1,25 @@
-import { fetchFromApi, NumberRange } from ".";
+import { fetchFromApi } from ".";
 
 
 export interface ScheduleTable {
-    table: (number | null)[][];
+    [timeSlotId: string]: (number | null)[];
 }
-export interface TimeSlotBounceRate {
-    onlyDefault: number;
-    withAlt: number;
+export interface ScheduleTableBounceRateNodeValue {
+    bounceRate: number;
     needsUpdate: boolean;
+}
+export interface BounceRateTable {
+    [timeSlotId: string]: (ScheduleTableBounceRateNodeValue | null)[]
 }
 export interface AlternativeStreamCalculationResult {
     altStreams: (number | null)[];
-    bounceRate: TimeSlotBounceRate;
+    bounceRateArray: (ScheduleTableBounceRateNodeValue | null)[];
 }
 
 
 export async function getTable() : Promise<ScheduleTable> {
     let response = await fetchFromApi(`/api/v1/scheduleTable`);
-    return await response.json();
+    return (await response.json())['table'];
 }
 
 export async function setStreamSchedule(slotId: number, streamNumber: number, categoryId: number) {
@@ -33,25 +35,21 @@ export async function deleteStreamSchedule(slotId: number, streamNumber: number)
     });
 }
 
-export async function calculateAlternativeStreams(slotId: number, bounceRateRange: NumberRange) {
-    let response = await fetchFromApi(`/api/v1/scheduleTable/alternatives?slotId=${slotId}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(bounceRateRange)
+export async function calculateAlternativeStreams(slotId: number, maxBounceRate: number) {
+    let response = await fetchFromApi(`/api/v1/scheduleTable/alternatives?slotId=${slotId}&maxBounceRate=${maxBounceRate}`, {
+        method: 'POST'
     })
     return await response.json() as AlternativeStreamCalculationResult;
 }
 
-export async function calculateTimeSlotBounceRate(slotId: number, bounceRateRange: NumberRange) {
-    let response = await fetchFromApi(`/api/v1/scheduleTable/bounceRate?slotId=${slotId}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(bounceRateRange)
+export async function calculateTimeSlotBounceRate(slotId: number, maxBounceRate: number) {
+    let response = await fetchFromApi(`/api/v1/scheduleTable/bounceRate?slotId=${slotId}&maxBounceRate=${maxBounceRate}`, {
+        method: 'POST'
     })
-    return await response.json() as TimeSlotBounceRate;
+    return await response.json() as ScheduleTableBounceRateNodeValue[];
 }
 
-export async function getAllTimeSlotBounceRates() {
+export async function getBounceRateTable() : Promise<BounceRateTable> {
     let response = await fetchFromApi(`/api/v1/scheduleTable/bounceRate`)
-    return await response.json() as (TimeSlotBounceRate | null)[];
+    return (await response.json())['table'];
 }

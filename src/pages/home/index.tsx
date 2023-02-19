@@ -7,9 +7,7 @@ import './index.scss'
 
 const Home : React.FC = () => {
 
-    const [ minBounceRate, setMinBounceRate ] = useState<number>(0);
     const [ maxBounceRate, setMaxBounceRate ] = useState<number>(30);
-
 
     return (
         <div className='page-content'>
@@ -18,12 +16,8 @@ const Home : React.FC = () => {
                 <div className='expected-br-span'>예상 Bounce rate: N/A%</div>
                 <div className='br-control'>
                     <div className='control-item'>
-                        Bounce rate 구간 조정
+                        Bounce rate 최댓값
                         <div>
-                            <input 
-                                type='number' value={ minBounceRate } 
-                                onChange={ e => setMinBounceRate(parseInt(e.target.value)) }
-                            /> % ~
                             <input
                                 type='number' value={ maxBounceRate }
                                 onChange={ e => setMaxBounceRate(parseInt(e.target.value)) }
@@ -32,9 +26,7 @@ const Home : React.FC = () => {
                     </div>
                 </div>
             </div>
-            <MainPageScheduleTable bounceRateRange={{
-                min: minBounceRate, max: maxBounceRate
-            }}/>
+            <MainPageScheduleTable maxBounceRate={ maxBounceRate }/>
         </div>
     )
 }

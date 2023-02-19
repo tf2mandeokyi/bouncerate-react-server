@@ -6,11 +6,6 @@ export interface ErrorMessage {
     timestamp: Date;
 }
 
-export interface NumberRange {
-    min: number;
-    max: number;
-}
-
 export function isInstanceOfErrorMessage(object: any) : object is ErrorMessage {
     return 'error' in object && 'statusCode' in object && 'timestamp' in object;
 }

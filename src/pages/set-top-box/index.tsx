@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { getBounceRate, setBounceRate } from '../../api/bouncerate';
+import { getBounceRate, randomizeBounceRateOfSetTopBox, setBounceRate } from '../../api/bouncerate';
 import { ProductCategory, getCategoriesCount, getCategoriesPage } from '../../api/categories';
 import { getSetTopBox, getSetTopBoxesCount, getSetTopBoxesPage, SetTopBox } from '../../api/settopboxes';
 import { padDecimal } from '../../utils/math';
@@ -18,6 +18,26 @@ const SetTopBoxInformation : React.FC = () => {
     // redux stuff
     const currentIdState = useAppSelector((state) => state.currentId);
     const dispatch = useAppDispatch();
+
+
+    const randomizeBounceRate = useCallback(async (setTopBoxId: number, update: () => void) => {
+        await randomizeBounceRateOfSetTopBox(setTopBoxId);
+        update();
+    }, []);
+
+
+    const getTableHeadColumn = useCallback((update: () => void) => {
+        if(!setTopBox) return <></>
+        return [
+            <>상품 그룹명</>, 
+            <>Bounce rate</>,
+            <div
+                key='randomize'
+                className='button gray'
+                onClick={ () => randomizeBounceRate(setTopBox.id, update) }
+            >랜덤화</div>
+        ] as (JSX.Element | [ JSX.Element, number ])[];
+    }, [ setTopBox, randomizeBounceRate ]);
 
 
     const onBounceRateEditButtonClick = useCallback(async (category: ProductCategory, update: () => void) => {
@@ -71,7 +91,7 @@ const SetTopBoxInformation : React.FC = () => {
                     <tr><td>셋톱박스 위치</td><td>{ setTopBox.location ?? '-' }</td></tr>
                 </EntityDescriptionTable>
                 <EntityTable<ProductCategory>
-                    tableHeadColumn={ [ <>상품 그룹명</>, [ <>Bounce rate</>, 2 ] ] }
+                    tableHeadColumn={ getTableHeadColumn }
                     getEntityCount={ getCategoriesCount }
                     getEntitiesPage={ getCategoriesPage }
                     entityToJSX={ entityToJSX }

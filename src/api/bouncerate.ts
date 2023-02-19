@@ -15,3 +15,15 @@ export async function setBounceRate({ categoryId, setTopBoxId }: NumbersOnlyObje
         body: JSON.stringify(bounceRate)
     });
 }
+
+export async function randomizeBounceRateOfCategory(categoryId: number) : Promise<void> {
+    await fetchFromApi(`/api/v1/bounceRates/category/${categoryId}/randomize`, {
+        method: 'POST'
+    });
+}
+
+export async function randomizeBounceRateOfSetTopBox(setTopBoxId: number) : Promise<void> {
+    await fetchFromApi(`/api/v1/bounceRates/setTopBox/${setTopBoxId}/randomize`, {
+        method: 'POST'
+    });
+}

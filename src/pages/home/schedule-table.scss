@@ -42,7 +42,11 @@
             td {
                 min-width: 150px;
 
-                &:nth-child(2n-1):not(:first-child) {
+                &.needs-update {
+                    background-color: rgba(255, 0, 0, 0.309);
+                    text-decoration: line-through;
+                }
+                &:nth-child(2n-1):not(:first-child):not(.needs-update) {
                     background-color: rgba(0, 0, 0, 0.05);
                 }
                 &:first-child {
@@ -50,18 +54,10 @@
                 }
             }
 
-            &:nth-child(2) {
-                border-bottom: 1px solid rgba(0, 0, 0, 0.5);
-            }
-
             &.br-exp {
                 height: 35px;
                 font-size: 85%;
-                background-color: rgba(0, 55, 255, 0.1);
-
-                td {
-                    padding-top: 3px;
-                }
+                border-bottom: 1px solid rgba(0, 0, 0, 0.5);
 
                 .button {
                     font-size: 11px;

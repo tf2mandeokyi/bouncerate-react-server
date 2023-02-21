@@ -104,7 +104,7 @@ const MainPageScheduleTable : React.FC<TableProps> = ({ maxBounceRate }) => {
         if(!tableData) return;
         
         if(categoryId !== null) setStreamSchedule(timeSlotId, streamNumber, categoryId);
-        else deleteStreamSchedule(timeSlotId, 0);
+        else deleteStreamSchedule(timeSlotId, streamNumber);
 
         setTableData(t => {
             if(!t) return undefined;
@@ -115,8 +115,13 @@ const MainPageScheduleTable : React.FC<TableProps> = ({ maxBounceRate }) => {
         setBounceRateTableData(t => {
             if(!t) return undefined;
             let newTable = { ...t };
-            let nodeValue = newTable[timeSlotId][streamNumber];
-            if(nodeValue) nodeValue.needsUpdate = true;
+            let nodeTableColumn = newTable[timeSlotId];
+            for(let i = 0; i < nodeTableColumn.length; i++) {
+                if(i < streamNumber) continue;
+
+                let nodeValue = nodeTableColumn[i];
+                if(nodeValue) nodeValue.needsUpdate = true;
+            }
             return newTable;
         })
     }, [ tableData ]);
@@ -157,7 +162,10 @@ const MainPageScheduleTable : React.FC<TableProps> = ({ maxBounceRate }) => {
         setBounceRateTableData(t => {
             if(!t) return undefined;
             let newTable = { ...t };
-            newTable[timeSlotId] = newBounceRate;
+            for(let i = 0; i < newBounceRate.length; i++) {
+                if(!newBounceRate[i]) continue;
+                newTable[timeSlotId][i] = newBounceRate[i];
+            }
             return newTable;
         })
 
@@ -208,15 +216,19 @@ const MainPageScheduleTable : React.FC<TableProps> = ({ maxBounceRate }) => {
 
 
     const getBounceRateList = useCallback((streamNumber: number) => {
-        if(!bounceRateTableData || !slotLoadingArray) return <td colSpan={ 999 }>Loading...</td>;
+        if(!tableData || !bounceRateTableData || !slotLoadingArray) {
+            return <td colSpan={ 999 }>Loading...</td>;
+        }
 
         return timeSlotName.map((e, i) => {
-            let timeSlotBounceRate = bounceRateTableData[i][streamNumber];
+            let bounceRateNodeValue = bounceRateTableData[i][streamNumber];
+            let stream = tableData[i][streamNumber];
             
-            let bounceRateString = timeSlotBounceRate ? padDecimal(timeSlotBounceRate.bounceRate, 2) : '-';
+            let bounceRateString = bounceRateNodeValue && stream ?
+                    padDecimal(bounceRateNodeValue.bounceRate, 2) :
+                     '-';
 
-            let recalculateButton = streamNumber === 3 &&
-                    (!timeSlotBounceRate || timeSlotBounceRate?.needsUpdate) ?
+            let recalculateButton = streamNumber === 3 ?
                     <div className='button gray' onClick={ () => recalculateTimeSlotBounceRate(i) }>
                         재계산
                     </div> : <></>
@@ -227,12 +239,15 @@ const MainPageScheduleTable : React.FC<TableProps> = ({ maxBounceRate }) => {
             </>;
             
             return (
-                <td key={ `br-${streamNumber}-${e}` }>
+                <td 
+                    key={ `br-${streamNumber}-${e}` } 
+                    className={ stream && bounceRateNodeValue?.needsUpdate ? 'needs-update' : '' }
+                >
                     { tdContent }
                 </td>
             );
         })
-    }, [ bounceRateTableData, recalculateTimeSlotBounceRate, slotLoadingArray ])
+    }, [ tableData, bounceRateTableData, recalculateTimeSlotBounceRate, slotLoadingArray ])
 
 
     // Data initialization
@@ -247,6 +262,37 @@ const MainPageScheduleTable : React.FC<TableProps> = ({ maxBounceRate }) => {
     }, [ update, updateCategoryMap ]);
 
 
+    const getTableBody = useCallback(() => {
+        let trArray : JSX.Element[] = [
+            <>
+                <tr key='schdl-tbl-0'>
+                    <td>기본</td>
+                    { getDefaultStreamList() }
+                </tr>
+                <tr className='br-exp' key='schdl-tbl-0-br'>
+                    <td>예상 Bounce rate</td>
+                    { getBounceRateList(0) }
+                </tr>
+            </>
+        ];
+        const streamNumberList = [1, 2, 3];
+        for(let streamNumber of streamNumberList) {
+            trArray.push(
+                <>
+                    <tr key={ `schdl-tbl-${streamNumber}` }>
+                        <td>대체 { streamNumber }</td>{ getAltStreamList(streamNumber) }
+                    </tr>
+                    <tr className='br-exp' key={ `schdl-tbl-${streamNumber}-br` }>
+                        <td>예상 Bounce rate</td>
+                        { getBounceRateList(streamNumber) }
+                    </tr>
+                </>
+            )
+        }
+        return trArray;
+    }, [ getAltStreamList, getDefaultStreamList, getBounceRateList ])
+
+
     return (
         <div className='schedule-table-wrapper'>
             <table>
@@ -255,29 +301,7 @@ const MainPageScheduleTable : React.FC<TableProps> = ({ maxBounceRate }) => {
                     { getTableHead() }
                 </tr></thead>
                 <tbody>
-                    <tr>
-                        <td>기본</td>
-                        { getDefaultStreamList() }
-                    </tr>
-                    <tr className='br-exp'>
-                        <td>예상 Bounce rate</td>
-                        { getBounceRateList(0) }
-                    </tr>
-                    <tr><td>대체 1</td>{ getAltStreamList(1) }</tr>
-                    <tr className='br-exp'>
-                        <td>예상 Bounce rate</td>
-                        { getBounceRateList(1) }
-                    </tr>
-                    <tr><td>대체 2</td>{ getAltStreamList(2) }</tr>
-                    <tr className='br-exp'>
-                        <td>예상 Bounce rate</td>
-                        { getBounceRateList(2) }
-                    </tr>
-                    <tr><td>대체 3</td>{ getAltStreamList(3) }</tr>
-                    <tr className='br-exp'>
-                        <td>예상 Bounce rate</td>
-                        { getBounceRateList(3) }
-                    </tr>
+                    { getTableBody() }
                 </tbody>
             </table>
         </div>
